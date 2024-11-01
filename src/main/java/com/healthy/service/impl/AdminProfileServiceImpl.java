@@ -1,16 +1,12 @@
 package com.healthy.service.impl;
 
 
-import com.healthy.dto.ProfileCreateDTO;
 import com.healthy.dto.ProfileDTO;
-import com.healthy.dto.ProfileUpdateDTO;
 import com.healthy.exception.ResourceNotFoundException;
 import com.healthy.mapper.ProfileMapper;
 import com.healthy.model.entity.Profile;
-import com.healthy.model.entity.User;
 import com.healthy.repository.ProfileRepository;
 import com.healthy.repository.SubPlanRepository;
-import com.healthy.repository.UserRepository;
 import com.healthy.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +21,6 @@ public class AdminProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
     private final ProfileMapper profileMapper;
     private final SubPlanRepository subPlanRepository;
-    private final UserRepository userRepository;
 
 
     @Transactional(readOnly = true)
