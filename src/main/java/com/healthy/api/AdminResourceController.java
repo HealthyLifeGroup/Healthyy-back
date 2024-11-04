@@ -46,12 +46,15 @@ public class AdminResourceController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<ResourceDetailsDTO> createResource(@Valid @RequestBody ResourceCreateUpdateDTO resourceFromDto) {
         ResourceDetailsDTO newResource = adminResourceService.create(resourceFromDto);
         return new ResponseEntity<>(newResource, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResourceDetailsDTO> updateResource(@PathVariable Integer id,
                                                              @Valid @RequestBody ResourceCreateUpdateDTO resourceFromDto) {
         ResourceDetailsDTO updatedResource = adminResourceService.update(id, resourceFromDto);
@@ -59,6 +62,7 @@ public class AdminResourceController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Resource> deleteResource(@PathVariable("id") Integer id) {
         adminResourceService.delete(id);
         return new ResponseEntity<Resource>(HttpStatus.NO_CONTENT);

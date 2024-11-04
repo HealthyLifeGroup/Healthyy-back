@@ -7,6 +7,8 @@ import com.healthy.mapper.SubscriptionMapper;
 import com.healthy.model.entity.Profile;
 import com.healthy.model.entity.SubPlan;
 import com.healthy.model.entity.Subscription;
+import com.healthy.model.enums.PaymentStatus;
+import com.healthy.model.enums.SubscriptionStatus;
 import com.healthy.repository.ProfileRepository;
 import com.healthy.repository.SubPlanRepository;
 import com.healthy.repository.SubscriptionRepository;
@@ -17,7 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -92,4 +96,18 @@ public class AdminSubscriptionServiceImpl implements AdminSubscriptionService {
                 .orElseThrow(() -> new ResourceNotFoundException("No encontrado"));
         subscriptionRepository.delete(subscription);
     }
+
+    @Override
+    public SubscriptionDTO confirmPayment(Integer id) {
+        Subscription subscription = subscriptionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found"));
+        subscription.setPaymentStatus(PaymentStatus.PAID);
+        subscription.setSubscriptionStatus(SubscriptionStatus.ACTIVE);
+        subscription.setStartAt(LocalDateTime.now());
+        subscription.setEndAt(subscription.getStartAt().plusDays(subscription.getSubPlan().getDurationDays()));
+        Subscription updateSubscription = subscriptionRepository.save(subscription);
+        return subscriptionMapper.toDetailsDTO(updateSubscription);
+    }
+
+
 }
