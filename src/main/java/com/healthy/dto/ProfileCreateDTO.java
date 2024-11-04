@@ -11,8 +11,6 @@ public class ProfileCreateDTO {
     private Float height;
     private Float weight;
     private Integer age;
-    private Float height;
-    private Float weight;
     private Gender gender;
     private String healthConditions;
 }
