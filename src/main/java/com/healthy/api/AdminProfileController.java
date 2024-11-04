@@ -3,6 +3,7 @@ package com.healthy.api;
 import com.healthy.dto.ProfileCreateDTO;
 import com.healthy.dto.ProfileDTO;
 import com.healthy.service.ProfileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
