@@ -1,6 +1,6 @@
-package com.healthy.integration.service;
+package com.healthy.integration.notification.email.service;
 
-import com.healthy.integration.dto.Mail;
+import com.healthy.integration.notification.email.dto.Mail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
