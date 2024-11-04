@@ -1,8 +1,8 @@
 package com.healthy.service.impl;
 
 import com.healthy.exception.ResourceNotFoundException;
-import com.healthy.integration.dto.Mail;
-import com.healthy.integration.service.EmailService;
+import com.healthy.integration.notification.email.dto.Mail;
+import com.healthy.integration.notification.email.service.EmailService;
 import com.healthy.model.entity.PasswordResetToken;
 import com.healthy.model.entity.User;
 import com.healthy.repository.PasswordResetTokenRepository;

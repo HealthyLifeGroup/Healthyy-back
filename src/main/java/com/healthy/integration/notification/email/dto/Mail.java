@@ -1,4 +1,4 @@
-package com.healthy.integration.dto;
+package com.healthy.integration.notification.email.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
