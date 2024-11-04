@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,16 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin/habitTypes")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminHabitTypeController {
     private final AdminHabitTypeService adminHabitTypeService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<HabitTypeDTO>> getAllHabitTypes() {
         List<HabitTypeDTO> habitTypes = adminHabitTypeService.getAll();
         return new ResponseEntity<>(habitTypes, HttpStatus.OK);
     }
 
     @GetMapping("/page")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Page<HabitTypeDTO>> paginateHabitTypes(
             @PageableDefault(size = 5, sort = "name")Pageable pageable) {
         Page<HabitTypeDTO> habitTypes = adminHabitTypeService.paginate(pageable);
@@ -33,6 +37,7 @@ public class AdminHabitTypeController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<HabitTypeDTO> getHabitTypeById(@PathVariable("id") Integer id) {
         HabitTypeDTO habitType = adminHabitTypeService.findById(id);
         return new ResponseEntity<>(habitType, HttpStatus.OK);

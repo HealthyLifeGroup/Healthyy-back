@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,20 +19,24 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("admin/goals")
+@PreAuthorize("hasRole('USER')")
 public class AdminGoalController {
     private final GoalService goalService;
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<GoalDTO>> getById(@PathVariable("id") Integer id) {
         List<GoalDTO> goal = goalService.getById(id);
         return ResponseEntity.ok(goal);
     }
     @GetMapping("/page")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Page<GoalDTO>> getPage(@PageableDefault(size=5) Pageable pageable){
         Page<GoalDTO> goal = goalService.paginate(pageable);
         return new ResponseEntity<>(goal, HttpStatus.OK);
     }
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<GoalDTO>> getAll() {
         List<GoalDTO> goal = goalService.getAll();
         return ResponseEntity.ok(goal);
