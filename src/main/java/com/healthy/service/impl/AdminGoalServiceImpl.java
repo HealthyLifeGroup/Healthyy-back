@@ -6,20 +6,20 @@ import com.healthy.dto.GoalTrackingRecordDTO;
 import com.healthy.exception.ResourceNotFoundException;
 import com.healthy.mapper.GoalMapper;
 import com.healthy.model.entity.*;
-import com.healthy.repository.GoalRepository;
-import com.healthy.repository.HabitRepository;
-import com.healthy.repository.PlanRepository;
-import com.healthy.repository.ProfileRepository;
+import com.healthy.model.enums.GoalStatus;
+import com.healthy.repository.*;
 import com.healthy.service.GoalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,13 +31,18 @@ public class AdminGoalServiceImpl implements GoalService {
     private final ProfileRepository profileRepository;
     private final HabitRepository habitRepository;
     private final PlanRepository planRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     @Override
     public GoalDTO create(GoalCreateDTO goalCreateDTO) {
-        // Buscar las entidades relacionadas como Perfil, Hábito y Plan
-        Profile profile = profileRepository.findById(goalCreateDTO.getProfileId())
-                .orElseThrow(() -> new ResourceNotFoundException("Profile not found with id: " + goalCreateDTO.getProfileId()));
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> user = userRepository.findByUsername(username);
+
+        Profile profile = profileRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
+
         Habit habit = habitRepository.findById(goalCreateDTO.getHabitId())
                 .orElseThrow(() -> new ResourceNotFoundException("Habit not found with id: " + goalCreateDTO.getHabitId()));
         Plan plan = planRepository.findById(goalCreateDTO.getPlanId())
@@ -48,11 +53,11 @@ public class AdminGoalServiceImpl implements GoalService {
         goal.setProfile(profile);
         goal.setHabit(habit);
         goal.setPlan(plan);
+        goal.setGoalStatus(GoalStatus.IN_PROGRESS);
         goal.setTargetValue(goalCreateDTO.getTargetValue());
         goal.setCurrentValue(goalCreateDTO.getCurrentValue());
         goal.setStartDate(LocalDateTime.now());
         goal.setEndDate(goalCreateDTO.getEndDate());
-        goal.setGoalStatus(goalCreateDTO.getStatus());
 
         // Crear y asociar cada TrackingRecord al Goal
         List<TrackingRecord> trackingRecords = goalCreateDTO.getTrackings().stream().map(trackingDTO -> {
@@ -80,14 +85,11 @@ public class AdminGoalServiceImpl implements GoalService {
     public GoalDTO update(Integer id, GoalCreateDTO updateGoal){
         Goal fromGoalDb = goalRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Goal "+id+" not found"));
-        Profile profile = profileRepository.findById(updateGoal.getProfileId())
-                .orElseThrow(() -> new ResourceNotFoundException("Perfil "+updateGoal.getProfileId()+" not found"));
         Habit habit = habitRepository.findById(updateGoal.getHabitId())
                 .orElseThrow(() -> new ResourceNotFoundException("Habit "+updateGoal.getHabitId()+" not found"));
         Plan plan = planRepository.findById(updateGoal.getPlanId())
                 .orElseThrow(() -> new ResourceNotFoundException("Plan "+updateGoal.getPlanId()+" not found"));
 
-        fromGoalDb.setProfile(profile);
         fromGoalDb.setHabit(habit);
         fromGoalDb.setPlan(plan);
         fromGoalDb.setStartDate(LocalDateTime.now());

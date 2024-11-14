@@ -44,6 +44,7 @@ public class AdminPlanController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity<PlanDTO> create(@RequestBody PlanCreateDTO planDTO) {
         PlanDTO plan = planService.create(planDTO);
         return new ResponseEntity<>(plan, HttpStatus.CREATED);

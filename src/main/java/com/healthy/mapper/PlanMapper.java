@@ -23,7 +23,6 @@ public class PlanMapper {
     public Plan toPlanCreateDTO(PlanCreateDTO planCreateDTO) {
         Plan plan = modelMapper.map(planCreateDTO, Plan.class);
         Profile profile = new Profile();
-        profile.setId(planCreateDTO.getProfileId());
         plan.setProfile(profile);
 
         plan.setName(planCreateDTO.getPlanName());
@@ -38,6 +37,7 @@ public class PlanMapper {
     }
     public PlanDTO toPlanDTO(Plan plan) {
         PlanDTO planDTO = modelMapper.map(plan, PlanDTO.class);
+        planDTO.setPlanId(plan.getId());
         planDTO.setPlanName(plan.getName());
         planDTO.setProfileId(plan.getProfile().getId());
         planDTO.setDescription(plan.getDescription());

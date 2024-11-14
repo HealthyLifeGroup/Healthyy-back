@@ -23,8 +23,6 @@ public class GoalDTO {
     private String habitName;
     private String habitTypeName;
     private Frequency frequency;
-    // PLAN
-    private String planName;
-    private String planDescription;
+
     private List<GoalTrackingRecordDTO> trackings;
 }

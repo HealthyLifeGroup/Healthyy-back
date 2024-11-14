@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -40,9 +41,10 @@ public class AdminProfileServiceImpl implements ProfileService {
     }
     @Transactional(readOnly = true)
     @Override
-    public ProfileDTO findById(Integer id){
-        Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile "+id+" not found"));
+    public ProfileDTO findByUsername(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        Profile profile = profileRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("El perfil de "+ username +" no se ha encontrado"));
         return profileMapper.toProfileDTO(profile);
     }
     @Override
@@ -57,4 +59,9 @@ public class AdminProfileServiceImpl implements ProfileService {
         return profileCreateDTO;
     }
 
+    @Override
+    public boolean profileExists(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.isPresent() && user.get().getProfile() != null;
+    }
 }
