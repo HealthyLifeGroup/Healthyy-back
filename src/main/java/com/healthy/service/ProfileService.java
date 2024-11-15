@@ -8,5 +8,7 @@ import java.util.List;
 public interface ProfileService {
 
     List<ProfileDTO> getAll();
-    ProfileDTO findById(Integer id);
+    ProfileDTO findByUsername(String username);
+    ProfileCreateDTO create(ProfileCreateDTO profileCreateDTO);
+    boolean profileExists(String username);
 }

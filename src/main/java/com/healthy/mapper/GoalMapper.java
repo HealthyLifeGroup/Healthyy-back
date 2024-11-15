@@ -5,6 +5,7 @@ import com.healthy.dto.GoalDTO;
 import com.healthy.dto.GoalTrackingRecordCreateDTO;
 import com.healthy.dto.GoalTrackingRecordDTO;
 import com.healthy.model.entity.*;
+import com.healthy.model.enums.GoalStatus;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
@@ -25,14 +26,13 @@ public class GoalMapper {
         Habit habit = new Habit();
         Plan plan = new Plan();
         HabitType habitType = new HabitType();
-        profile.setId(goalDTO.getProfileId());
         habit.setId(goalDTO.getHabitId());
         plan.setId(goalDTO.getPlanId());
         goal.setProfile(profile);
         goal.setHabit(habit);
         goal.setPlan(plan);
         goal.getHabit().setHabitType(habitType);
-        goal.setGoalStatus(goalDTO.getStatus());
+        goal.setGoalStatus(GoalStatus.IN_PROGRESS);
 
         // MAPEAR MANUALMENTE LAS LISTAS
         goal.setTrackingRecords(goalDTO.getTrackings().stream()
@@ -54,9 +54,7 @@ public class GoalMapper {
         goalDTO.setHabitName(goal.getHabit().getName());
         goalDTO.setHabitTypeName(goal.getHabit().getHabitType().getName());
         goalDTO.setFrequency(goal.getHabit().getFrequency());
-        //PLAN
-        goalDTO.setPlanName(goal.getPlan().getName());
-        goalDTO.setPlanDescription(goal.getPlan().getDescription());
+
 
         goalDTO.setTrackings(goal.getTrackingRecords().stream()
                 .map(this::toGoalTrackingRecordDTO)

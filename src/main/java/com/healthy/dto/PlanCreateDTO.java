@@ -8,8 +8,6 @@ import java.util.List;
 
 @Data
 public class PlanCreateDTO {
-
-    private Integer profileId;
     private String planName;
     private String description;
     private LocalDateTime startDate;

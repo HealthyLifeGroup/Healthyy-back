@@ -38,9 +38,6 @@ public class  Profile {
     private String healthConditions;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
-    private List<Goal> goals;
-
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
     private List<Plan> plans;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)

@@ -8,7 +8,6 @@ import java.util.List;
 
 @Data
 public class GoalCreateDTO {
-    private Integer profileId;
     private Integer habitId;
     private Integer planId;
 
@@ -18,6 +17,5 @@ public class GoalCreateDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    private GoalStatus status;
     private List<GoalTrackingRecordCreateDTO> trackings;
 }
